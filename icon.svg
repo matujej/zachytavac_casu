@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0a0a0a"/>
+  <circle cx="256" cy="272" r="140" fill="none" stroke="#4ade80" stroke-width="16"/>
+  <line x1="256" y1="272" x2="256" y2="172" stroke="#e0e0e0" stroke-width="12" stroke-linecap="round"/>
+  <line x1="256" y1="272" x2="320" y2="310" stroke="#666" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="272" r="10" fill="#4ade80"/>
+  <rect x="236" y="100" width="40" height="20" rx="4" fill="#4ade80"/>
+  <text x="256" y="460" text-anchor="middle" font-family="monospace" font-size="42" font-weight="600" fill="#666" letter-spacing="3">ZČ</text>
+</svg>
