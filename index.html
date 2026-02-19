@@ -47,8 +47,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
-    padding-bottom: 16px;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
     border-bottom: 1px solid var(--border);
   }
 
@@ -251,6 +251,18 @@
     50% { opacity: 0.3; }
   }
 
+  /* Backup footer */
+  .backup-bar {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .backup-bar .btn { font-size: 10px; color: var(--text-dim); }
+
   .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -368,6 +380,12 @@
 </header>
 
 <div id="projects"></div>
+
+<div class="backup-bar">
+  <button class="btn" onclick="exportData()">↓ export zálohy</button>
+  <button class="btn" onclick="document.getElementById('import-file').click()">↑ import zálohy</button>
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)" />
+</div>
 
 <script>
 const STORAGE_KEY = 'stylo-toddl-data';
@@ -587,6 +605,40 @@ function render() {
       if (totalEl) totalEl.textContent = formatDuration(totalTime(project));
     }, 200);
   });
+}
+
+// Backup
+function exportData() {
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0, 10);
+  a.download = `zachytavac-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.projects || !Array.isArray(imported.projects)) {
+        alert('Neplatný soubor');
+        return;
+      }
+      if (!confirm(`Import ${imported.projects.length} projektů? Přepíše aktuální data.`)) return;
+      state = imported;
+      save();
+      render();
+    } catch { alert('Chyba při čtení souboru'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 // Form handler
